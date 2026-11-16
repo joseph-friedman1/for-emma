@@ -19,6 +19,8 @@ type TeleportRequest = { room: RoomId; serial: number };
 
 const initialMovement = (): Movement => ({ forward: false, back: false, turnLeft: false, turnRight: false });
 
+const assetUrl = (path: string) => `./${path.replace(/^\/+/, "")}`;
+
 function daysTogether(): string {
   const [year, month, day] = relationshipStart.split("-").map(Number);
   const start = new Date(year, month - 1, day);
@@ -87,7 +89,7 @@ function PhotoFrame({ memory, position, rotation, scale, onOpen }: {
   scale: number;
   onOpen: (memory: Memory) => void;
 }) {
-  const texture = useTexture(memory.image);
+  const texture = useTexture(assetUrl(memory.image));
   return (
     <group position={position} rotation={rotation} scale={scale} onPointerOver={() => { document.body.style.cursor = "pointer"; }}
       onPointerOut={() => { document.body.style.cursor = "auto"; }}>
@@ -569,7 +571,7 @@ function RoomContent({ room, onOpenMemory, onFinish }: {
         <div className="memory-list">
           {visibleMemories.map((memory) => (
             <button className="memory-row" key={memory.id} onClick={() => onOpenMemory(memory)}>
-              <img src={memory.image} alt="" />
+              <img src={assetUrl(memory.image)} alt="" />
               <span><strong>{memory.title}</strong><small>{memory.date} · {memory.category}</small></span>
               <Maximize2 size={15} />
             </button>
@@ -584,7 +586,7 @@ function RoomContent({ room, onOpenMemory, onFinish }: {
       <div className="memory-list">
         {roomMemories.map((memory) => (
           <button className="memory-row" key={memory.id} onClick={() => onOpenMemory(memory)}>
-            <img src={memory.image} alt="" />
+            <img src={assetUrl(memory.image)} alt="" />
             <span><strong>{memory.title}</strong><small>{memory.date} · {memory.category}</small></span>
             <Maximize2 size={15} />
           </button>
@@ -618,7 +620,7 @@ function RoomContent({ room, onOpenMemory, onFinish }: {
         <div className="memory-list">
           {roomMemories.map((memory) => (
             <button className="memory-row" key={memory.id} onClick={() => onOpenMemory(memory)}>
-              <img src={memory.image} alt="" />
+              <img src={assetUrl(memory.image)} alt="" />
               <span><strong>{memory.title}</strong><small>{memory.date} · {memory.category}</small></span>
               <Maximize2 size={15} />
             </button>
@@ -643,7 +645,7 @@ function MemoryModal({ memory, onClose }: { memory: Memory; onClose: () => void 
     }}>
       <motion.div className="memory-modal" initial={{ opacity: 0, y: 18, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 12 }}>
         <button className="close-button" onClick={onClose} aria-label="Close memory"><X size={18} /></button>
-        <img className="memory-large-image" src={memory.image} alt={memory.title} />
+        <img className="memory-large-image" src={assetUrl(memory.image)} alt={memory.title} />
         <div className="memory-modal-copy">
           <div className="eyebrow">{memory.date} <span>·</span> {memory.category}</div>
           <h2>{memory.title}</h2><p className="memory-caption">{memory.caption}</p><p>{memory.description}</p>
